@@ -12,6 +12,11 @@ package soundex.actions;
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.webui.CustomJavaAction;
 
+/**
+ * Implements the Soundex algorithm.
+ * 
+ * https://en.wikipedia.org/wiki/Soundex
+ */
 public class Soundex extends CustomJavaAction<java.lang.String>
 {
 	private java.lang.String Input;
