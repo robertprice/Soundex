@@ -10,21 +10,24 @@
 package soundex.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
-import com.mendix.webui.CustomJavaAction;
+import com.mendix.systemwideinterfaces.core.UserAction;
 
 /**
  * Implements the Soundex algorithm.
  * 
  * https://en.wikipedia.org/wiki/Soundex
  */
-public class Soundex extends CustomJavaAction<java.lang.String>
+public class Soundex extends UserAction<java.lang.String>
 {
-	private java.lang.String Input;
+	private final java.lang.String Input;
 
-	public Soundex(IContext context, java.lang.String Input)
+	public Soundex(
+		IContext context,
+		java.lang.String _input
+	)
 	{
 		super(context);
-		this.Input = Input;
+		this.Input = _input;
 	}
 
 	@java.lang.Override
@@ -39,6 +42,7 @@ public class Soundex extends CustomJavaAction<java.lang.String>
 
 	/**
 	 * Returns a string representation of this action
+	 * @return a string representation of this action
 	 */
 	@java.lang.Override
 	public java.lang.String toString()

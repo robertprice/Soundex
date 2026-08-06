@@ -6,28 +6,25 @@ package nanoflowcommons.proxies;
 
 public enum Platform
 {
-	Web(new java.lang.String[][] { new java.lang.String[] { "en_US", "Web" }, new java.lang.String[] { "en_GB", "Web" } }),
-	Native_mobile(new java.lang.String[][] { new java.lang.String[] { "en_US", "Native mobile" }, new java.lang.String[] { "en_GB", "Native mobile" } }),
-	Hybrid_mobile(new java.lang.String[][] { new java.lang.String[] { "en_US", "Hybrid mobile" }, new java.lang.String[] { "en_GB", "Hybrid mobile" } });
+	Web("4acea2f9-8532-471a-b0e3-0a2b03a3ff48"),
+	Native_mobile("93628b40-00f5-4f97-9d83-79f33fb36240"),
+	Hybrid_mobile("f864d755-fe8c-4570-acfb-cb45fa55ebe5");
 
-	private java.util.Map<java.lang.String, java.lang.String> captions;
-
-	private Platform(java.lang.String[][] captionStrings)
+	private final java.lang.String i18nCaptionKey;
+	
+	private Platform(java.lang.String i18nCaptionKey)
 	{
-		this.captions = new java.util.HashMap<java.lang.String, java.lang.String>();
-		for (java.lang.String[] captionString : captionStrings)
-			captions.put(captionString[0], captionString[1]);
+		this.i18nCaptionKey = i18nCaptionKey;
 	}
 
 	public java.lang.String getCaption(java.lang.String languageCode)
 	{
-		if (captions.containsKey(languageCode))
-			return captions.get(languageCode);
-		return captions.get("en_GB");
+		String caption = com.mendix.core.Core.getInternationalizedString(languageCode, i18nCaptionKey);
+		return caption.isEmpty() ? getCaption() : caption;
 	}
 
 	public java.lang.String getCaption()
 	{
-		return captions.get("en_GB");
+		return com.mendix.core.Core.getInternationalizedString("en_GB", i18nCaptionKey);
 	}
 }

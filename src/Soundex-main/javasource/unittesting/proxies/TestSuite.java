@@ -4,7 +4,7 @@
 
 package unittesting.proxies;
 
-public class TestSuite
+public class TestSuite implements com.mendix.systemwideinterfaces.core.IEntityProxy
 {
 	private final com.mendix.systemwideinterfaces.core.IMendixObject testSuiteMendixObject;
 
@@ -24,13 +24,16 @@ public class TestSuite
 		LastRun("LastRun"),
 		LastRunTime("LastRunTime"),
 		TestCount("TestCount"),
+		TestPassedCount("TestPassedCount"),
 		TestFailedCount("TestFailedCount"),
+		HasSetup("HasSetup"),
+		HasTearDown("HasTearDown"),
 		AutoRollbackMFs("AutoRollbackMFs"),
 		Result("Result"),
 		Prefix1("Prefix1"),
 		Prefix2("Prefix2");
 
-		private java.lang.String metaName;
+		private final java.lang.String metaName;
 
 		MemberNames(java.lang.String s)
 		{
@@ -46,32 +49,28 @@ public class TestSuite
 
 	public TestSuite(com.mendix.systemwideinterfaces.core.IContext context)
 	{
-		this(context, com.mendix.core.Core.instantiate(context, "UnitTesting.TestSuite"));
+		this(context, com.mendix.core.Core.instantiate(context, entityName));
 	}
 
 	protected TestSuite(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject testSuiteMendixObject)
 	{
-		if (testSuiteMendixObject == null)
+		if (testSuiteMendixObject == null) {
 			throw new java.lang.IllegalArgumentException("The given object cannot be null.");
-		if (!com.mendix.core.Core.isSubClassOf("UnitTesting.TestSuite", testSuiteMendixObject.getType()))
-			throw new java.lang.IllegalArgumentException("The given object is not a UnitTesting.TestSuite");
+		}
+		if (!testSuiteMendixObject.isInstanceOf(entityName)) {
+			throw new java.lang.IllegalArgumentException(String.format("The given object is not a %s", entityName));
+		}	
 
 		this.testSuiteMendixObject = testSuiteMendixObject;
 		this.context = context;
 	}
 
 	/**
-	 * @deprecated Use 'TestSuite.load(IContext, IMendixIdentifier)' instead.
-	 */
-	@java.lang.Deprecated
-	public static unittesting.proxies.TestSuite initialize(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixIdentifier mendixIdentifier) throws com.mendix.core.CoreException
-	{
-		return unittesting.proxies.TestSuite.load(context, mendixIdentifier);
-	}
-
-	/**
 	 * Initialize a proxy using context (recommended). This context will be used for security checking when the get- and set-methods without context parameters are called.
 	 * The get- and set-methods with context parameter should be used when for instance sudo access is necessary (IContext.createSudoClone() can be used to obtain sudo access).
+	 * @param context The context to be used
+	 * @param mendixObject The Mendix object for the new instance
+	 * @return a new instance of this proxy class
 	 */
 	public static unittesting.proxies.TestSuite initialize(com.mendix.systemwideinterfaces.core.IContext context, com.mendix.systemwideinterfaces.core.IMendixObject mendixObject)
 	{
@@ -86,43 +85,13 @@ public class TestSuite
 
 	public static java.util.List<unittesting.proxies.TestSuite> load(com.mendix.systemwideinterfaces.core.IContext context, java.lang.String xpathConstraint) throws com.mendix.core.CoreException
 	{
-		java.util.List<unittesting.proxies.TestSuite> result = new java.util.ArrayList<unittesting.proxies.TestSuite>();
-		for (com.mendix.systemwideinterfaces.core.IMendixObject obj : com.mendix.core.Core.retrieveXPathQuery(context, "//UnitTesting.TestSuite" + xpathConstraint))
-			result.add(unittesting.proxies.TestSuite.initialize(context, obj));
-		return result;
+		return com.mendix.core.Core.createXPathQuery(String.format("//%1$s%2$s", entityName, xpathConstraint))
+			.execute(context)
+			.stream()
+			.map(obj -> unittesting.proxies.TestSuite.initialize(context, obj))
+			.collect(java.util.stream.Collectors.toList());
 	}
 
-	/**
-	 * Commit the changes made on this proxy object.
-	 */
-	public final void commit() throws com.mendix.core.CoreException
-	{
-		com.mendix.core.Core.commit(context, getMendixObject());
-	}
-
-	/**
-	 * Commit the changes made on this proxy object using the specified context.
-	 */
-	public final void commit(com.mendix.systemwideinterfaces.core.IContext context) throws com.mendix.core.CoreException
-	{
-		com.mendix.core.Core.commit(context, getMendixObject());
-	}
-
-	/**
-	 * Delete the object.
-	 */
-	public final void delete()
-	{
-		com.mendix.core.Core.delete(context, getMendixObject());
-	}
-
-	/**
-	 * Delete the object using the specified context.
-	 */
-	public final void delete(com.mendix.systemwideinterfaces.core.IContext context)
-	{
-		com.mendix.core.Core.delete(context, getMendixObject());
-	}
 	/**
 	 * @return value of Module
 	 */
@@ -268,6 +237,42 @@ public class TestSuite
 	}
 
 	/**
+	 * @return value of TestPassedCount
+	 */
+	public final java.lang.Long getTestPassedCount()
+	{
+		return getTestPassedCount(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of TestPassedCount
+	 */
+	public final java.lang.Long getTestPassedCount(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.Long) getMendixObject().getValue(context, MemberNames.TestPassedCount.toString());
+	}
+
+	/**
+	 * Set value of TestPassedCount
+	 * @param testpassedcount
+	 */
+	public final void setTestPassedCount(java.lang.Long testpassedcount)
+	{
+		setTestPassedCount(getContext(), testpassedcount);
+	}
+
+	/**
+	 * Set value of TestPassedCount
+	 * @param context
+	 * @param testpassedcount
+	 */
+	public final void setTestPassedCount(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Long testpassedcount)
+	{
+		getMendixObject().setValue(context, MemberNames.TestPassedCount.toString(), testpassedcount);
+	}
+
+	/**
 	 * @return value of TestFailedCount
 	 */
 	public final java.lang.Long getTestFailedCount()
@@ -301,6 +306,78 @@ public class TestSuite
 	public final void setTestFailedCount(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Long testfailedcount)
 	{
 		getMendixObject().setValue(context, MemberNames.TestFailedCount.toString(), testfailedcount);
+	}
+
+	/**
+	 * @return value of HasSetup
+	 */
+	public final java.lang.Boolean getHasSetup()
+	{
+		return getHasSetup(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of HasSetup
+	 */
+	public final java.lang.Boolean getHasSetup(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.Boolean) getMendixObject().getValue(context, MemberNames.HasSetup.toString());
+	}
+
+	/**
+	 * Set value of HasSetup
+	 * @param hassetup
+	 */
+	public final void setHasSetup(java.lang.Boolean hassetup)
+	{
+		setHasSetup(getContext(), hassetup);
+	}
+
+	/**
+	 * Set value of HasSetup
+	 * @param context
+	 * @param hassetup
+	 */
+	public final void setHasSetup(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Boolean hassetup)
+	{
+		getMendixObject().setValue(context, MemberNames.HasSetup.toString(), hassetup);
+	}
+
+	/**
+	 * @return value of HasTearDown
+	 */
+	public final java.lang.Boolean getHasTearDown()
+	{
+		return getHasTearDown(getContext());
+	}
+
+	/**
+	 * @param context
+	 * @return value of HasTearDown
+	 */
+	public final java.lang.Boolean getHasTearDown(com.mendix.systemwideinterfaces.core.IContext context)
+	{
+		return (java.lang.Boolean) getMendixObject().getValue(context, MemberNames.HasTearDown.toString());
+	}
+
+	/**
+	 * Set value of HasTearDown
+	 * @param hasteardown
+	 */
+	public final void setHasTearDown(java.lang.Boolean hasteardown)
+	{
+		setHasTearDown(getContext(), hasteardown);
+	}
+
+	/**
+	 * Set value of HasTearDown
+	 * @param context
+	 * @param hasteardown
+	 */
+	public final void setHasTearDown(com.mendix.systemwideinterfaces.core.IContext context, java.lang.Boolean hasteardown)
+	{
+		getMendixObject().setValue(context, MemberNames.HasTearDown.toString(), hasteardown);
 	}
 
 	/**
@@ -340,10 +417,10 @@ public class TestSuite
 	}
 
 	/**
-	 * Set value of Result
+	 * Get value of Result
 	 * @param result
 	 */
-	public final unittesting.proxies.UnitTestResult getResult()
+	public final unittesting.proxies.ENUM_UnitTestResult getResult()
 	{
 		return getResult(getContext());
 	}
@@ -352,20 +429,20 @@ public class TestSuite
 	 * @param context
 	 * @return value of Result
 	 */
-	public final unittesting.proxies.UnitTestResult getResult(com.mendix.systemwideinterfaces.core.IContext context)
+	public final unittesting.proxies.ENUM_UnitTestResult getResult(com.mendix.systemwideinterfaces.core.IContext context)
 	{
 		Object obj = getMendixObject().getValue(context, MemberNames.Result.toString());
-		if (obj == null)
+		if (obj == null) {
 			return null;
-
-		return unittesting.proxies.UnitTestResult.valueOf((java.lang.String) obj);
+		}
+		return unittesting.proxies.ENUM_UnitTestResult.valueOf((java.lang.String) obj);
 	}
 
 	/**
 	 * Set value of Result
 	 * @param result
 	 */
-	public final void setResult(unittesting.proxies.UnitTestResult result)
+	public final void setResult(unittesting.proxies.ENUM_UnitTestResult result)
 	{
 		setResult(getContext(), result);
 	}
@@ -375,12 +452,13 @@ public class TestSuite
 	 * @param context
 	 * @param result
 	 */
-	public final void setResult(com.mendix.systemwideinterfaces.core.IContext context, unittesting.proxies.UnitTestResult result)
+	public final void setResult(com.mendix.systemwideinterfaces.core.IContext context, unittesting.proxies.ENUM_UnitTestResult result)
 	{
-		if (result != null)
+		if (result != null) {
 			getMendixObject().setValue(context, MemberNames.Result.toString(), result.toString());
-		else
+		} else {
 			getMendixObject().setValue(context, MemberNames.Result.toString(), null);
+		}
 	}
 
 	/**
@@ -455,17 +533,13 @@ public class TestSuite
 		getMendixObject().setValue(context, MemberNames.Prefix2.toString(), prefix2);
 	}
 
-	/**
-	 * @return the IMendixObject instance of this proxy for use in the Core interface.
-	 */
+	@java.lang.Override
 	public final com.mendix.systemwideinterfaces.core.IMendixObject getMendixObject()
 	{
 		return testSuiteMendixObject;
 	}
 
-	/**
-	 * @return the IContext instance of this proxy, or null if no IContext instance was specified at initialization.
-	 */
+	@java.lang.Override
 	public final com.mendix.systemwideinterfaces.core.IContext getContext()
 	{
 		return context;
@@ -474,9 +548,9 @@ public class TestSuite
 	@java.lang.Override
 	public boolean equals(Object obj)
 	{
-		if (obj == this)
+		if (obj == this) {
 			return true;
-
+		}
 		if (obj != null && getClass().equals(obj.getClass()))
 		{
 			final unittesting.proxies.TestSuite that = (unittesting.proxies.TestSuite) obj;
@@ -491,21 +565,13 @@ public class TestSuite
 		return getMendixObject().hashCode();
 	}
 
-	/**
-	 * @return String name of this class
-	 */
+  /**
+   * Gives full name ("Module.Entity" name) of the type of the entity.
+   *
+   * @return the name
+   */
 	public static java.lang.String getType()
 	{
-		return "UnitTesting.TestSuite";
-	}
-
-	/**
-	 * @return String GUID from this object, format: ID_0000000000
-	 * @deprecated Use getMendixObject().getId().toLong() to get a unique identifier for this object.
-	 */
-	@java.lang.Deprecated
-	public java.lang.String getGUID()
-	{
-		return "ID_" + getMendixObject().getId().toLong();
+		return entityName;
 	}
 }

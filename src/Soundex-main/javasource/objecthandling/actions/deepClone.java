@@ -11,8 +11,8 @@ package objecthandling.actions;
 
 import com.mendix.systemwideinterfaces.core.IContext;
 import com.mendix.systemwideinterfaces.core.IMendixObject;
-import com.mendix.webui.CustomJavaAction;
 import objecthandling.ORM;
+import com.mendix.systemwideinterfaces.core.UserAction;
 
 /**
  * Clones objects, their associations and even referred objects. 
@@ -35,38 +35,47 @@ import objecthandling.ORM;
  * 
  * Note that DeepClone does commit all objects, where Clone does not.
  */
-public class deepClone extends CustomJavaAction<java.lang.Boolean>
+public class deepClone extends UserAction<java.lang.Boolean>
 {
-	private IMendixObject source;
-	private IMendixObject target;
-	private java.lang.String membersToSkip;
-	private java.lang.String membersToKeep;
-	private java.lang.String reverseAssociations;
-	private java.lang.String excludeEntities;
-	private java.lang.String excludeModules;
+	private final IMendixObject source;
+	private final IMendixObject target;
+	private final java.lang.String membersToSkip;
+	private final java.lang.String membersToKeep;
+	private final java.lang.String reverseAssociations;
+	private final java.lang.String excludeEntities;
+	private final java.lang.String excludeModules;
 
-	public deepClone(IContext context, IMendixObject source, IMendixObject target, java.lang.String membersToSkip, java.lang.String membersToKeep, java.lang.String reverseAssociations, java.lang.String excludeEntities, java.lang.String excludeModules)
+	public deepClone(
+		IContext context,
+		IMendixObject _source,
+		IMendixObject _target,
+		java.lang.String _membersToSkip,
+		java.lang.String _membersToKeep,
+		java.lang.String _reverseAssociations,
+		java.lang.String _excludeEntities,
+		java.lang.String _excludeModules
+	)
 	{
 		super(context);
-		this.source = source;
-		this.target = target;
-		this.membersToSkip = membersToSkip;
-		this.membersToKeep = membersToKeep;
-		this.reverseAssociations = reverseAssociations;
-		this.excludeEntities = excludeEntities;
-		this.excludeModules = excludeModules;
+		this.source = _source;
+		this.target = _target;
+		this.membersToSkip = _membersToSkip;
+		this.membersToKeep = _membersToKeep;
+		this.reverseAssociations = _reverseAssociations;
+		this.excludeEntities = _excludeEntities;
+		this.excludeModules = _excludeModules;
 	}
 
 	@java.lang.Override
 	public java.lang.Boolean executeAction() throws Exception
 	{
 		// BEGIN USER CODE
-        this.membersToSkip       = this.membersToSkip == null       ? "" : this.membersToSkip;
-        this.membersToKeep       = this.membersToKeep == null       ? "" : this.membersToKeep;
-        this.reverseAssociations = this.reverseAssociations == null ? "" : this.reverseAssociations;
-        this.excludeEntities     = this.excludeEntities == null     ? "" : this.excludeEntities;
-        this.excludeModules      = this.excludeModules == null      ? "" : this.excludeModules;
-	    
+		String membersToSkip       = this.membersToSkip == null       ? "" : this.membersToSkip;
+		String membersToKeep       = this.membersToKeep == null       ? "" : this.membersToKeep;
+		String reverseAssociations = this.reverseAssociations == null ? "" : this.reverseAssociations;
+		String excludeEntities     = this.excludeEntities == null     ? "" : this.excludeEntities;
+		String excludeModules      = this.excludeModules == null      ? "" : this.excludeModules;
+
 		ORM.deepClone(getContext(), source, target, membersToSkip, membersToKeep, reverseAssociations, excludeEntities, excludeModules);
 		return true;
 		// END USER CODE
@@ -74,6 +83,7 @@ public class deepClone extends CustomJavaAction<java.lang.Boolean>
 
 	/**
 	 * Returns a string representation of this action
+	 * @return a string representation of this action
 	 */
 	@java.lang.Override
 	public java.lang.String toString()
